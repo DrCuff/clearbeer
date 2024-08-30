@@ -4,28 +4,59 @@ podman and homebrew in one
 There's no need for any of this...
 
 ```
-cuff@amdmini:~/clearbeer$ podman build -t clearbeer .
-STEP 1/8: FROM ruby:3.3
-Resolving "ruby" using unqualified-search registries (/home/linuxbrew/.linuxbrew/etc/containers/registries.conf)
-Trying to pull docker.io/library/ruby:3.3...
-Getting image source signatures
-Copying blob 0d01fe7cfd1e done   | 
-Copying blob 903681d87777 done   | 
-Copying blob 6ed93aa58a52 done   | 
-Copying blob 3cbbe86a28c2 done   | 
-Copying blob 787c78da4383 done   | 
-Copying blob 1cd9229db862 done   | 
-Copying blob 41b75ad313a6 done   | 
-Copying config 94de028496 done   | 
-Writing manifest to image destination
-STEP 2/8: LABEL org.opencontainers.image.source="https://github.com/drcuff/clearbeer"       org.opencontainers.image.title="clearbeer"       org.opencontainers.image.description="podman clearbeer"       org.label-schema.docker.cmd="podman-compose up -d"       maintainer="James Cuff"
+jcuff@amdmini:~/clearbeer$ podman build -t clearbeer .
+STEP 1/10: FROM ruby:3.3
+STEP 2/10: LABEL org.opencontainers.image.source="https://github.com/drcuff/clearbeer"       org.opencontainers.image.title="clearbeer"       org.opencontainers.image.description="podman clearbeer"       org.label-schema.docker.cmd="podman-compose up -d"       maintainer="James Cuff"
+--> Using cache 3cbd5bb99805f569395e6e3f34295b12f6f4d0d7f7f832aa66970661491265db
 --> 3cbd5bb99805
-STEP 3/8: RUN useradd -m -s /bin/zsh linuxbrew &&     usermod -aG sudo linuxbrew &&      mkdir -p /home/linuxbrew/.linuxbrew &&     chown -R linuxbrew: /home/linuxbrew/.linuxbrew
-useradd: Warning: missing or non-executable shell '/bin/zsh'
---> 1b9f3b632f6b
-STEP 4/8: USER linuxbrew
---> a93017d33f0b
-STEP 5/8: RUN curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash 
+STEP 3/10: RUN useradd -m -s /bin/bash linuxbrew &&     usermod -aG sudo linuxbrew &&      mkdir -p /home/linuxbrew/.linuxbrew &&     chown -R linuxbrew: /home/linuxbrew/.linuxbrew
+--> Using cache 3ead49ca5d234a5c9247dde394a376ee18ae3b7a9905782b1b7799ea48426625
+--> 3ead49ca5d23
+STEP 4/10: RUN apt update
+--> Using cache 8cf3a1e9a0d3de9d0a90875144a70fe72b37ddc3dbb21ed5583fac9024f53e4d
+--> 8cf3a1e9a0d3
+STEP 5/10: RUN apt install -y uidmap slirp4netns
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  libslirp0 libsubid4
+The following NEW packages will be installed:
+  libslirp0 libsubid4 slirp4netns uidmap
+0 upgraded, 4 newly installed, 0 to remove and 5 not upgraded.
+Need to get 501 kB of archives.
+After this operation, 921 kB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian bookworm/main amd64 libslirp0 amd64 4.7.0-1 [63.0 kB]
+Get:2 http://deb.debian.org/debian bookworm/main amd64 libsubid4 amd64 1:4.13+dfsg1-1+b1 [211 kB]
+Get:3 http://deb.debian.org/debian bookworm/main amd64 slirp4netns amd64 1.2.0-1 [37.5 kB]
+Get:4 http://deb.debian.org/debian bookworm/main amd64 uidmap amd64 1:4.13+dfsg1-1+b1 [189 kB]
+debconf: delaying package configuration, since apt-utils is not installed
+Fetched 501 kB in 0s (7979 kB/s)
+Selecting previously unselected package libslirp0:amd64.
+(Reading database ... 23243 files and directories currently installed.)
+Preparing to unpack .../libslirp0_4.7.0-1_amd64.deb ...
+Unpacking libslirp0:amd64 (4.7.0-1) ...
+Selecting previously unselected package libsubid4:amd64.
+Preparing to unpack .../libsubid4_1%3a4.13+dfsg1-1+b1_amd64.deb ...
+Unpacking libsubid4:amd64 (1:4.13+dfsg1-1+b1) ...
+Selecting previously unselected package slirp4netns.
+Preparing to unpack .../slirp4netns_1.2.0-1_amd64.deb ...
+Unpacking slirp4netns (1.2.0-1) ...
+Selecting previously unselected package uidmap.
+Preparing to unpack .../uidmap_1%3a4.13+dfsg1-1+b1_amd64.deb ...
+Unpacking uidmap (1:4.13+dfsg1-1+b1) ...
+Setting up libsubid4:amd64 (1:4.13+dfsg1-1+b1) ...
+Setting up libslirp0:amd64 (4.7.0-1) ...
+Setting up slirp4netns (1.2.0-1) ...
+Setting up uidmap (1:4.13+dfsg1-1+b1) ...
+Processing triggers for libc-bin (2.36-9+deb12u7) ...
+--> c5a08cd977ba
+STEP 6/10: USER linuxbrew
+--> 0f6c798a4a22
+STEP 7/10: RUN curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash 
 Warning: Running in non-interactive mode because `stdin` is not a TTY.
 ==> Checking for `sudo` access (which may request your password)...
 ==> This script will install:
@@ -37,6 +68,11 @@ Warning: Running in non-interactive mode because `stdin` is not a TTY.
 /home/linuxbrew/.linuxbrew/Homebrew
 ==> The following new directories will be created:
 /home/linuxbrew/.linuxbrew/bin
+/home/linuxbrew/.linuxbrew/etc
+/home/linuxbrew/.linuxbrew/include
+/home/linuxbrew/.linuxbrew/lib
+/home/linuxbrew/.linuxbrew/sbin
+
 ```
 
 Time passes...
