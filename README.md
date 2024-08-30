@@ -38,3 +38,23 @@ Warning: Running in non-interactive mode because `stdin` is not a TTY.
 ==> The following new directories will be created:
 /home/linuxbrew/.linuxbrew/bin
 ```
+
+Time passes...
+
+```
+==> Summary
+🍺  /home/linuxbrew/.linuxbrew/Cellar/podman/5.2.2: 262 files, 134.4MB
+==> Running `brew cleanup podman`...
+Disable this behaviour by setting HOMEBREW_NO_INSTALL_CLEANUP.
+Hide these hints with HOMEBREW_NO_ENV_HINTS (see `man brew`).
+
+==> Caveats
+==> podman
+Warning: podman provides a service which can only be used on macOS or systemd!
+You can manually execute the service instead with:
+  /home/linuxbrew/.linuxbrew/opt/podman/bin/podman system service --time\=0
+COMMIT clearbeer
+--> 67962d7975a2
+Successfully tagged localhost/clearbeer:latest
+67962d7975a21aee95cb915ee20f293f8d7579d67ae591c4167a926a7a409f14
+```
