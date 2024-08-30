@@ -6,7 +6,7 @@ LABEL org.opencontainers.image.source="https://github.com/drcuff/clearbeer" \
       org.label-schema.docker.cmd="podman-compose up -d" \
       maintainer="James Cuff"
 
-RUN useradd -m -s /bin/zsh linuxbrew && \
+RUN useradd -m -s /bin/bash linuxbrew && \
     usermod -aG sudo linuxbrew &&  \
     mkdir -p /home/linuxbrew/.linuxbrew && \
     chown -R linuxbrew: /home/linuxbrew/.linuxbrew
