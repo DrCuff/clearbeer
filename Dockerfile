@@ -9,20 +9,23 @@ LABEL org.opencontainers.image.source="https://github.com/drcuff/clearbeer" \
 RUN useradd -m -s /bin/bash linuxbrew && \
     usermod -aG sudo linuxbrew &&  \
     mkdir -p /home/linuxbrew/.linuxbrew && \
-    chown -R linuxbrew: /home/linuxbrew/.linuxbrew
+    chown -R linuxbrew /home/linuxbrew/.linuxbrew && \
+    echo "linuxbrew:10000:5000" > /etc/subuid && \
+    echo "linuxbrew:10000:5000" > /etc/subgid
 
 RUN apt update
-RUN apt install -y uidmap slirp4netns
+RUN apt install -y uidmap slirp4netns sudo
+RUN chmod 4755 /usr/bin/newgidmap
+RUN chmod 4755 /usr/bin/newuidmap
+
 
 USER linuxbrew
 
 RUN curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash 
-
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:${PATH}"
-
 RUN brew update
-
 RUN brew install podman
+RUN /home/linuxbrew/.linuxbrew/opt/podman/bin/podman system service --time\=0
 
 
 # Warning: podman provides a service which can only be used on macOS or systemd!
@@ -35,4 +38,5 @@ RUN brew install podman
 # remove all images:
 
 # jcuff@amdmini:~/clearbeer$ podman rmi -a -f
+
 
