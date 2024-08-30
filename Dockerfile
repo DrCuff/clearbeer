@@ -10,6 +10,10 @@ RUN useradd -m -s /bin/bash linuxbrew && \
     usermod -aG sudo linuxbrew &&  \
     mkdir -p /home/linuxbrew/.linuxbrew && \
     chown -R linuxbrew: /home/linuxbrew/.linuxbrew
+
+RUN apt update
+RUN apt install -y uidmap slirp4netns
+
 USER linuxbrew
 
 RUN curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash 
@@ -19,6 +23,7 @@ ENV PATH="/home/linuxbrew/.linuxbrew/bin:${PATH}"
 RUN brew update
 
 RUN brew install podman
+
 
 # Warning: podman provides a service which can only be used on macOS or systemd!
 # You can manually execute the service instead with:
@@ -30,3 +35,4 @@ RUN brew install podman
 # remove all images:
 
 # jcuff@amdmini:~/clearbeer$ podman rmi -a -f
+
