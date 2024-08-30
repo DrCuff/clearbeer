@@ -1,5 +1,48 @@
 # clearbeer
-podman and homebrew in one
+
+podman in podman in podman?
+
+```
+jcuff@amdmini:~/clearbeer$ podman build -t clearbeer .
+STEP 1/5: FROM registry.fedoraproject.org/fedora:latest
+Trying to pull registry.fedoraproject.org/fedora:latest...
+Getting image source signatures
+Copying blob 692b311ac241 done   | 
+
+jcuff@amdmini:~/clearbeer$ podman images
+REPOSITORY                         TAG         IMAGE ID      CREATED         SIZE
+localhost/clearbeer                latest      627c84680280  21 seconds ago  547 MB
+registry.fedoraproject.org/fedora  latest      9448a418a92a  9 hours ago     233 MB
+docker.io/library/ruby             3.3         94de028496f4  7 weeks ago     1.02 GB
+
+jcuff@amdmini:~/clearbeer$ podman run -it localhost/clearbeer bash
+[root@1a9273cb74ac /]# podman ps
+WARN[0000] Using rootless single mapping into the namespace. This might break some images. Check /etc/subuid and /etc/subgid for adding sub*ids if not using a network user 
+CONTAINER ID  IMAGE       COMMAND     CREATED     STATUS      PORTS       NAMES
+```
+
+Let's go priv mode!  Put the same docker file in the docker file...
+
+```
+jcuff@amdmini:~/clearbeer$ podman run --privileged -it localhost/clearbeer bash
+[root@6f38e1e8510b /]# vi /tmp/Dockerfile
+[root@6f38e1e8510b /]# cd /tmp
+[root@6f38e1e8510b tmp]# podman build -t clearbeer .
+
+
+[root@6f38e1e8510b tmp]# podman images
+REPOSITORY                         TAG         IMAGE ID      CREATED        SIZE
+localhost/clearbeer                latest      96f04ec2ac8f  7 seconds ago  545 MB
+registry.fedoraproject.org/fedora  latest      9448a418a92a  9 hours ago    233 MB
+
+[root@6f38e1e8510b tmp]# podman run --privileged -it localhost/clearbeer bash
+
+[root@f568c50efcd6 /]# uname -a
+Linux f568c50efcd6 6.8.0-40-generic #40~22.04.3-Ubuntu SMP PREEMPT_DYNAMIC Tue Jul 30 17:30:19 UTC 2 x86_64 GNU/Linux
+
+```
+
+next up podman and homebrew in one
 
 There's no need for any of this...
 
